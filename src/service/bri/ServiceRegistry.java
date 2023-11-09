@@ -16,8 +16,11 @@ public class ServiceRegistry {
 
     static {
         servicesClasses = new Vector<>();
+        serviceState = new Vector<>();
     }
     private static List<Class<? extends Service>> servicesClasses;
+    private static List<Boolean> serviceState;
+
 
     // ajoute une classe de service après contrôle de la norme BLTi
     public static void addService(Class<? extends Service> class1){
@@ -79,9 +82,13 @@ public class ServiceRegistry {
 
     }
 
+
     // renvoie la classe de service (numService -1)
     public static Class<? extends Service> getServiceClass(int numService) {
-        return servicesClasses.get(numService-1);
+        if(serviceState.get(numService-1)) {
+            return servicesClasses.get(numService-1);
+        }
+        return null;
     }
 
     public static Integer getServiceLength() {
@@ -89,6 +96,15 @@ public class ServiceRegistry {
     }
     public static void removeService(Integer numService) {
         servicesClasses.remove(numService-1);
+    }
+
+    public static void UpdateStateService(Integer numService) {
+        if(serviceState.get(numService-1)) {
+            serviceState.set(numService-1, false);
+        }
+        else {
+            serviceState.set(numService-1, true);
+        }
     }
 
 
@@ -100,16 +116,26 @@ public class ServiceRegistry {
         int i = 1;
         synchronized(servicesClasses) {
             for(Class<? extends Service> s : servicesClasses) {
-                Method toStringue = s.getMethod("toStringue");
-                String toStringueRes = (String) toStringue.invoke(s);
-                result.append("\n").append(i).append(". ").append(toStringueRes);
-                i++;
+                if (serviceState.get(i-1)) {
+                    Method toStringue = s.getMethod("toStringue");
+                    String toStringueRes = (String) toStringue.invoke(s);
+                    result.append("\n").append(i).append(". ").append(toStringueRes);
+                    i++;
+                }
+
 
             }
         }
         return result.toString();
     }
 
+    public static void addServiceState() {
+        serviceState.add(true);
+    }
+
+    public static void deleteServiceState(Integer indice) {
+        serviceState.remove(indice-1);
+    }
 }
 
 

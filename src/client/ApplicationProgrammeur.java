@@ -107,12 +107,46 @@ class ApplicationProgrammeur{
 
 	}
 
-	private static void startOrStopService(PrintWriter out, BufferedReader in1, String pseudo) {
+	private static void startOrStopService(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
+		out.println(pseudo);
 
+		String output = "";
+		while(!output.contains("Renseigner le numéro du service à démarrer/arrêter :")) {
+			output = in1.readLine();
+			System.out.println(output);
+		}
+		Scanner clavier = new Scanner(System.in);
+		String numService = "";
+		try {
+			numService = clavier.next();
+
+			out.println(numService);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		System.out.println(in1.readLine());
 	}
 
-	private static void deleteService(PrintWriter out, BufferedReader in1, String pseudo) {
+	private static void deleteService(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
+		out.println(pseudo);
 
+		String output = "";
+		while(!output.contains("Renseigner le numéro du service à supprimer :")) {
+			output = in1.readLine();
+			System.out.println(output);
+		}
+		Scanner clavier = new Scanner(System.in);
+		String numService = "";
+		try {
+			// ex : classes.ServiceInversion
+			numService = clavier.next();
+			//charger la classe et la déclarer au ServiceRegistry
+			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
+			out.println(numService);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		System.out.println(in1.readLine());
 	}
 
 	private static void updateFtpAdress(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
@@ -129,13 +163,19 @@ class ApplicationProgrammeur{
 		} catch (Exception e) {
             throw new RuntimeException(e);
         }
-        System.out.println(in1.readLine());
+		System.out.println(in1.readLine());
+		out.println(clavier.next());
+		System.out.println(in1.readLine());
 	}
 
 	private static void updateService(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
-		System.out.println("Renseigner le numéro du service à modifier");
-		Scanner clavier = new Scanner(System.in);
 		out.println(pseudo);
+		String output = "";
+		while(!output.contains("Renseigner le numéro du service à mettre-a-jour :")) {
+			output = in1.readLine();
+			System.out.println(output);
+		}
+		Scanner clavier = new Scanner(System.in);
 		String numService = "";
 		try {
 			// ex : classes.ServiceInversion

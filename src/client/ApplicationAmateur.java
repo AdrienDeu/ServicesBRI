@@ -26,7 +26,7 @@ class ApplicationAmateur {
 
 		//reçoit la réponse du serveur
 		BufferedReader in1 = new BufferedReader (new InputStreamReader(socket.getInputStream()));
-		String output = "not null";
+		String output = "";
 		while(!output.contains("Tapez le numéro de service désiré :")) {
 			output = in1.readLine();
 			System.out.println(output);

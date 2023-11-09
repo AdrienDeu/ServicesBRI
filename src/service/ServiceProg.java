@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -90,22 +91,62 @@ public class ServiceProg extends Service {
 
 			}
 			else if (choix2.equals("4")) {
-
+				Programmeur prog = getProgrammer(in1.readLine());
+				UpdateStateService(prog);
 			}
 			else if (choix2.equals("5")) {
-
+				Programmeur prog = getProgrammer(in1.readLine());
+				deleteService(prog);
 			}
 
 
 
 			
 			
-		} catch (IOException e1) {
+		} catch (IOException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
 	}
 
-	private void updateServ(Programmeur prog) throws IOException {
+	public void UpdateStateService(Programmeur prog) throws IOException {
+
+		try {
+			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à démarrer/arrêter :");
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+
+		ArrayList<Integer> services = prog.getServices();
+
+
+		//charger la classe et la déclarer au ServiceRegistry
+		Integer serv = Integer.parseInt(in1.readLine());
+		boolean isAuthor = false;
+		for (Integer service : services) {
+			if (serv.equals(service)) {
+				isAuthor=true;
+			}
+		}
+		if (isAuthor) {
+			ServiceRegistry.UpdateStateService(serv);
+			out.println("L'état du service a été mis à jour");
+		}
+		else {
+			out.println("L'état du service ne peut pas être mis à jour");
+		}
+
+
+
+
+	}
+
+	private void updateServ(Programmeur prog) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+		out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à modifier :");
+
 		ArrayList<Integer> services = prog.getServices();
 		Integer serv = Integer.parseInt(in1.readLine());
 		boolean isAuthor = false;
@@ -198,6 +239,7 @@ public class ServiceProg extends Service {
 			//charger la classe et la déclarer au ServiceRegistry
 			ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
 			prog.addService(ServiceRegistry.getServiceLength());
+			ServiceRegistry.addServiceState();
 			out.println("Le service a été ajouté/modifié");
 		}
 		catch (ClassCastException e) {
@@ -211,6 +253,41 @@ public class ServiceProg extends Service {
 
 	}
 
+	public void deleteService(Programmeur prog) throws IOException {
 
+		try {
+			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à supprimer :");
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+
+		ArrayList<Integer> services = prog.getServices();
+
+
+		//charger la classe et la déclarer au ServiceRegistry
+		Integer serv = Integer.parseInt(in1.readLine());
+		boolean isAuthor = false;
+		for (Integer service : services) {
+			if (serv.equals(service)) {
+				isAuthor=true;
+			}
+		}
+		if (isAuthor) {
+			ServiceRegistry.removeService(serv);
+			ServiceRegistry.deleteServiceState(serv);
+			out.println("Le service a été supprimé");
+		}
+		else {
+			out.println("Impossible de supprimer ce service");
+		}
+
+
+
+
+	}
 
 }

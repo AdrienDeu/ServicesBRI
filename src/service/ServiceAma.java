@@ -36,7 +36,6 @@ public class ServiceAma extends Service {
 			// instancier le service numéro "choix" en lui passant la socket "client"
 			// invoquer run() pour cette instance ou la lancer dans un thread à part
 			Class<? extends Service> classe = ServiceRegistry.getServiceClass(choix);
-
 			if(classe!=null) {
 				classe.getConstructor(Socket.class).newInstance(socket).run();
 			}
