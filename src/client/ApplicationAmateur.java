@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 class ApplicationAmateur {
 	private static final int PORT = 11443;
-	private static String IPV4 = "localhost";
+	private static final String IPV4 = "localhost";
 
 	public static void main(String[] args) throws IOException {
 		//crée la socket

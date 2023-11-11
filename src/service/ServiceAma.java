@@ -11,8 +11,7 @@ import java.net.Socket;
 
 
 public class ServiceAma extends Service {
-	private static final int PORT_AMA = 11443;
-	private Socket socket;
+	private final Socket socket;
 	public ServiceAma(Socket socket) {
 		this.socket = socket;
 	}
@@ -48,34 +47,17 @@ public class ServiceAma extends Service {
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException | InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		try {socket.close();} catch (IOException e2) {}
+        try {socket.close();} catch (IOException e2) {
+            throw new RuntimeException(e2);
+        }
 	}
 
-
-	// lancement du service
-	public void start() {
-		(new Thread(this)).start();
-	}
 
 }
 

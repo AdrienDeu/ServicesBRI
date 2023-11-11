@@ -20,8 +20,8 @@ public class ServiceRegistry {
         servicesClasses = new Vector<>();
         serviceState = new Vector<>();
     }
-    private static List<Class<? extends Service>> servicesClasses;
-    private static List<Boolean> serviceState;
+    private static final List<Class<? extends Service>> servicesClasses;
+    private static final List<Boolean> serviceState;
 
 
     // ajoute une classe de service après contrôle de la norme BLTi
@@ -125,12 +125,11 @@ public class ServiceRegistry {
 
                 if (serviceState.get(i-1)) {
                     result.append("\n").append(i).append(". ").append(toStringueRes).append(" : actif");
-                    i++;
                 }
                 else {
                     result.append("\n").append(i).append(". ").append(toStringueRes).append(" : désactivé");
-                    i++;
                 }
+                i++;
 
 
             }

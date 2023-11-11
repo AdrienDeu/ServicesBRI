@@ -1,25 +1,20 @@
 package client;
 
 
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
-
-import java.util.Scanner;
 
 
 class ApplicationProgrammeur{
 
 	private static final int PORT = 11444;
-	private static String IPV4 = "localhost";
+	private static final String IPV4 = "localhost";
 
 	
-	public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+	public static void main(String[] args) throws IOException {
 		//crée la socket
 		Socket socket = new Socket(IPV4, PORT);
 
@@ -69,12 +64,13 @@ class ApplicationProgrammeur{
 			isLogged = in1.readLine();
 		}
 
-		String commandes2 = "Taper :\n" +
-				"- 1 Pour fournir un nouveau service\n" +
-				"- 2 Pour mettre-à-jour un service\n" +
-				"- 3 Pour déclarer un changement d’adresse de son serveur ftp\n" +
-				"- 4 Pour démarrer/arrêter un service\n" +
-				"- 5 Pour désinstaller un service";
+		String commandes2 = """
+                Taper :
+                - 1 Pour fournir un nouveau service
+                - 2 Pour mettre-à-jour un service
+                - 3 Pour déclarer un changement d’adresse de son serveur ftp
+                - 4 Pour démarrer/arrêter un service
+                - 5 Pour désinstaller un service""";
 
 		System.out.println(commandes2);
 		int cmd2 = Integer.parseInt(input.readLine());
@@ -116,7 +112,7 @@ class ApplicationProgrammeur{
 			System.out.println(output);
 		}
 		BufferedReader clavier = new BufferedReader(new InputStreamReader(System.in));
-		String numService = "";
+		String numService;
 		try {
 			numService = clavier.readLine();
 
@@ -134,7 +130,7 @@ class ApplicationProgrammeur{
 			System.out.println(output);
 		}
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		String numService = "";
+		String numService;
 		try {
 			numService = input.readLine();
 
@@ -158,12 +154,10 @@ class ApplicationProgrammeur{
 			System.out.println(output);
 		}
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		String numService = "";
+		String numService;
 		try {
-			// ex : classes.ServiceInversion
 			numService = input.readLine();
-			//charger la classe et la déclarer au ServiceRegistry
-			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
+
 			out.println(numService);
 			System.out.println(in1.readLine());
 		} catch (Exception e) {
@@ -176,12 +170,10 @@ class ApplicationProgrammeur{
 		System.out.println("Renseigner votre nouvelle adresse FTP :");
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		out.println(pseudo);
-		String adresseFtp = "";
+		String adresseFtp;
 		try {
-			// ex : classes.ServiceInversion
 			adresseFtp = input.readLine();
-			//charger la classe et la déclarer au ServiceRegistry
-			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
+
 			out.println(adresseFtp);
 		} catch (Exception e) {
             throw new RuntimeException(e);
@@ -197,10 +189,8 @@ class ApplicationProgrammeur{
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		out.println(pseudo);
 		try {
-			// ex : classes.ServiceInversion
 			String classeName = input.readLine();
-			//charger la classe et la déclarer au ServiceRegistry
-			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
+
 			out.println(classeName);
 		}
 		catch (ClassCastException e) {

@@ -17,16 +17,14 @@ import service.bri.ServiceRegistry;
 
 
 public class ServiceProg extends Service {
-	private static Vector<Programmeur> programmeurs;
-
-	private static final int PORT_PROG = 11444;
+	private static final Vector<Programmeur> programmeurs;
 
 	String pseudo;
 
 	static {
-		programmeurs = new Vector<Programmeur>();
+		programmeurs = new Vector<>();
 	}
-	private Socket socket;
+	private final Socket socket;
 	public ServiceProg(Socket socket) {
 		this.socket = socket;
 		
@@ -73,30 +71,34 @@ public class ServiceProg extends Service {
 			}
 			// deuxième menu
 			String choix2 = in1.readLine();
-			if (choix2.equals("1")) {
-				Programmeur prog = getProgrammer(in1.readLine());
-				addService(prog);
-			}
-			else if (choix2.equals("2")) {
-				Programmeur prog = getProgrammer(in1.readLine());
-				updateServ(prog);
-			}
-			else if (choix2.equals("3")) {
-				Programmeur prog = getProgrammer(in1.readLine());
+            switch (choix2) {
+                case "1" -> {
+                    Programmeur prog = getProgrammer(in1.readLine());
+                    assert prog != null;
+                    addService(prog);
+                }
+                case "2" -> {
+                    Programmeur prog = getProgrammer(in1.readLine());
+                    updateServ(prog);
+                }
+                case "3" -> {
+                    Programmeur prog = getProgrammer(in1.readLine());
 
-				String newFtp = in1.readLine();
-				prog.setAdresseFtp("prog");
-				out.println("Adresse ftp modifiée");
+                    String newFtp = in1.readLine();
+                    assert prog != null;
+                    prog.setAdresseFtp(newFtp);
+                    out.println("Adresse ftp modifiée");
 
-			}
-			else if (choix2.equals("4")) {
-				Programmeur prog = getProgrammer(in1.readLine());
-				UpdateStateService(prog);
-			}
-			else if (choix2.equals("5")) {
-				Programmeur prog = getProgrammer(in1.readLine());
-				deleteService(prog);
-			}
+                }
+                case "4" -> {
+                    Programmeur prog = getProgrammer(in1.readLine());
+                    UpdateStateService(prog);
+                }
+                case "5" -> {
+                    Programmeur prog = getProgrammer(in1.readLine());
+                    deleteService(prog);
+                }
+            }
 
 
 
@@ -107,30 +109,27 @@ public class ServiceProg extends Service {
 		}
 	}
 
+	public boolean isAuthor(Programmeur prog, Integer serv) {
+		ArrayList<Integer> services = prog.getServices();
+
+		boolean author = false;
+		for (Integer service : services) {
+			if (serv.equals(service)) {
+				author=true;
+				break;
+			}
+		}
+		return author;
+	}
 	public void UpdateStateService(Programmeur prog) throws IOException {
 
 		try {
 			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à démarrer/arrêter :");
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
-
-		ArrayList<Integer> services = prog.getServices();
-
-
-		//charger la classe et la déclarer au ServiceRegistry
 		Integer serv = Integer.parseInt(in1.readLine());
-		boolean isAuthor = false;
-		for (Integer service : services) {
-			if (serv.equals(service)) {
-				isAuthor=true;
-				break;
-			}
-		}
+		boolean isAuthor = isAuthor(prog, serv);
 		if (isAuthor) {
 			ServiceRegistry.UpdateStateService(serv);
 			out.println("L'état du service a été mis à jour");
@@ -138,23 +137,15 @@ public class ServiceProg extends Service {
 		else {
 			out.println("L'état du service ne peut pas être mis à jour");
 		}
-
-
-
-
 	}
 
 	private void updateServ(Programmeur prog) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
 		try {
 			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à modifier :");
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
-		ArrayList<Integer> services = prog.getServices();
+        ArrayList<Integer> services = prog.getServices();
 		Integer serv = Integer.parseInt(in1.readLine());
 		boolean isAuthor = false;
 
@@ -198,9 +189,10 @@ public class ServiceProg extends Service {
 		boolean isLogin = false;
 		synchronized (programmeurs) {
 			for (Programmeur p : programmeurs) {
-				if (pseudo.equals(p.getLogin()) && mdp.equals(p.getMdp())) {
-					isLogin = true;
-				}
+                if (pseudo.equals(p.getLogin()) && mdp.equals(p.getMdp())) {
+                    isLogin = true;
+                    break;
+                }
 			}
 		}
 
@@ -223,7 +215,7 @@ public class ServiceProg extends Service {
 		String ftp = in1.readLine();
 
 
-		if (pseudo.equals("") || mdp.equals("") || ftp.equals("")) {
+		if (pseudo.isEmpty() || mdp.isEmpty() || ftp.isEmpty()) {
 			out.println("Veuillez renseigner tous les champs.");
 			return false;
 		}
@@ -238,20 +230,18 @@ public class ServiceProg extends Service {
 				}
 			}
 		}
-		this.programmeurs.add(new Programmeur(pseudo, mdp, ftp));
+		programmeurs.add(new Programmeur(pseudo, mdp, ftp));
 		out.println("Programmeur bien enregistré à la liste des programmeurs.");
 		return true;
 	}
 
 	public void addService(Programmeur prog) throws IOException {
 
-		// URLClassLoader sur ftp
 		URLClassLoader urlcl = URLClassLoader.newInstance(new URL[] {new URL (prog.getAdresseFtp())});
 
 
 		try {
 			String classeName = in1.readLine();
-			//charger la classe et la déclarer au ServiceRegistry
 			ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
 			prog.addService(ServiceRegistry.getServiceLength());
 			ServiceRegistry.addServiceState();
@@ -272,25 +262,12 @@ public class ServiceProg extends Service {
 
 		try {
 			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numero du service à supprimer :");
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 
-		ArrayList<Integer> services = prog.getServices();
-
-
-		//charger la classe et la déclarer au ServiceRegistry
 		Integer serv = Integer.parseInt(in1.readLine());
-		boolean isAuthor = false;
-		for (Integer service : services) {
-			if (serv.equals(service)) {
-				isAuthor=true;
-			}
-		}
+		boolean isAuthor = isAuthor(prog, serv);
 		if (isAuthor) {
 			ServiceRegistry.removeService(serv);
 			ServiceRegistry.deleteServiceState(serv);

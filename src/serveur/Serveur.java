@@ -7,15 +7,13 @@ import service.Service;
 
 
 public class Serveur implements Runnable {
-	private ServerSocket serveur;
-	private int port;
-	private Class<? extends Service> classe;
+	private final ServerSocket serveur;
+	private final Class<? extends Service> classe;
 	
 
 	
 	public Serveur(int p, Class<? extends Runnable> classe) throws IOException {
-		this.port = p;
-		this.serveur = new ServerSocket(port);
+		this.serveur = new ServerSocket(p);
 		this.classe = (Class<? extends Service>) classe;
 	}
 
@@ -30,13 +28,15 @@ public class Serveur implements Runnable {
 						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				};
-					
-			}
+				}
+
+            }
 				
 		}
 		catch (IOException e) { 
-			try {this.serveur.close();} catch (IOException e1) {}
+			try {this.serveur.close();} catch (IOException e1) {
+                throw new RuntimeException(e1);
+            }
 			System.err.println("Pb sur le port d'écoute :"+ e);
 		}
 	}

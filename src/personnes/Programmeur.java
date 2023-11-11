@@ -4,11 +4,11 @@ package personnes;
 import java.util.ArrayList;
 
 public class Programmeur {
-    private String login;
-    private String mdp;
+    private final String login;
+    private final String mdp;
     private String adresseFtp;
 
-    private ArrayList<Integer> services;
+    private final ArrayList<Integer> services;
 
     public Programmeur(String login, String mdp, String adresseFtp) {
         this.login = login;
