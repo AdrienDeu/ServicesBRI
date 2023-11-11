@@ -1,6 +1,5 @@
 package service;
 
-import service.bri.Service;
 import service.bri.ServiceRegistry;
 
 import java.io.BufferedReader;

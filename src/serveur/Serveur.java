@@ -3,7 +3,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 
-import service.bri.Service;
+import service.Service;
 
 
 public class Serveur implements Runnable {

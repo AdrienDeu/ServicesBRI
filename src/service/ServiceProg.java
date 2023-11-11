@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import personnes.Programmeur;
-import service.bri.Service;
 import service.bri.ServiceRegistry;
 
 
@@ -129,6 +128,7 @@ public class ServiceProg extends Service {
 		for (Integer service : services) {
 			if (serv.equals(service)) {
 				isAuthor=true;
+				break;
 			}
 		}
 		if (isAuthor) {
@@ -145,19 +145,34 @@ public class ServiceProg extends Service {
 	}
 
 	private void updateServ(Programmeur prog) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-		out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à modifier :");
-
+		try {
+			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à modifier :");
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
 		ArrayList<Integer> services = prog.getServices();
 		Integer serv = Integer.parseInt(in1.readLine());
 		boolean isAuthor = false;
+
+
+
 		for (Integer service : services) {
-			if (serv.equals(service)) {
-				isAuthor=true;
-			}
+            if (serv.equals(service)) {
+                isAuthor = true;
+                break;
+            }
 		}
+
+
+
+
 		if (isAuthor) {
-			ServiceRegistry.removeService(serv);
 			out.println("Renseigner le chemin vers la classe de service");
+			ServiceRegistry.removeService(serv);
 			addService(prog);
 		}
 		else {
@@ -256,7 +271,7 @@ public class ServiceProg extends Service {
 	public void deleteService(Programmeur prog) throws IOException {
 
 		try {
-			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numéro du service à supprimer :");
+			out.println(ServiceRegistry.toStringue()+"\nRenseigner le numero du service à supprimer :");
 		} catch (NoSuchMethodException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {

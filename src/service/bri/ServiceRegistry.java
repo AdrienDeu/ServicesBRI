@@ -1,5 +1,7 @@
 package service.bri;
 
+import service.Service;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,7 +30,7 @@ public class ServiceRegistry {
         Class<?>[] suprClass = new Class[]{class1.getSuperclass()};
         boolean impService = false;
         for (Class classe : suprClass) {
-            if (classe.getName().equals("service.bri.Service")) {
+            if (classe.getName().equals("service.Service")) {
                 impService = true;
                 break;
             }
@@ -95,7 +97,9 @@ public class ServiceRegistry {
         return servicesClasses.size();
     }
     public static void removeService(Integer numService) {
+
         servicesClasses.remove(numService-1);
+        serviceState.remove(numService-1);
     }
 
     public static void UpdateStateService(Integer numService) {
@@ -116,10 +120,15 @@ public class ServiceRegistry {
         int i = 1;
         synchronized(servicesClasses) {
             for(Class<? extends Service> s : servicesClasses) {
+                Method toStringue = s.getMethod("toStringue");
+                String toStringueRes = (String) toStringue.invoke(s);
+
                 if (serviceState.get(i-1)) {
-                    Method toStringue = s.getMethod("toStringue");
-                    String toStringueRes = (String) toStringue.invoke(s);
-                    result.append("\n").append(i).append(". ").append(toStringueRes);
+                    result.append("\n").append(i).append(". ").append(toStringueRes).append(" : actif");
+                    i++;
+                }
+                else {
+                    result.append("\n").append(i).append(". ").append(toStringueRes).append(" : désactivé");
                     i++;
                 }
 

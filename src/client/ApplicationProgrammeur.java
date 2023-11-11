@@ -115,48 +115,71 @@ class ApplicationProgrammeur{
 			output = in1.readLine();
 			System.out.println(output);
 		}
-		Scanner clavier = new Scanner(System.in);
+		BufferedReader clavier = new BufferedReader(new InputStreamReader(System.in));
 		String numService = "";
 		try {
-			numService = clavier.next();
+			numService = clavier.readLine();
 
 			out.println(numService);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		System.out.println(in1.readLine());
+	}
+	private static void updateService(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
+		out.println(pseudo);
+		String output = "";
+		while(!output.contains("Renseigner le numéro du service à modifier :")) {
+			output = in1.readLine();
+			System.out.println(output);
+		}
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		String numService = "";
+		try {
+			numService = input.readLine();
+
+			out.println(numService);
+			System.out.println(in1.readLine());
+			out.println(input.readLine());
+			System.out.println(in1.readLine());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+
 	}
 
 	private static void deleteService(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
 		out.println(pseudo);
 
 		String output = "";
-		while(!output.contains("Renseigner le numéro du service à supprimer :")) {
+		while(!output.contains("Renseigner le numero du service à supprimer :")) {
 			output = in1.readLine();
 			System.out.println(output);
 		}
-		Scanner clavier = new Scanner(System.in);
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String numService = "";
 		try {
 			// ex : classes.ServiceInversion
-			numService = clavier.next();
+			numService = input.readLine();
 			//charger la classe et la déclarer au ServiceRegistry
 			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
 			out.println(numService);
+			System.out.println(in1.readLine());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		System.out.println(in1.readLine());
+
 	}
 
 	private static void updateFtpAdress(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
 		System.out.println("Renseigner votre nouvelle adresse FTP :");
-		Scanner clavier = new Scanner(System.in);
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		out.println(pseudo);
 		String adresseFtp = "";
 		try {
 			// ex : classes.ServiceInversion
-			adresseFtp = clavier.next();
+			adresseFtp = input.readLine();
 			//charger la classe et la déclarer au ServiceRegistry
 			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
 			out.println(adresseFtp);
@@ -164,48 +187,24 @@ class ApplicationProgrammeur{
             throw new RuntimeException(e);
         }
 		System.out.println(in1.readLine());
-		out.println(clavier.next());
-		System.out.println(in1.readLine());
-	}
-
-	private static void updateService(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
-		out.println(pseudo);
-		String output = "";
-		while(!output.contains("Renseigner le numéro du service à mettre-a-jour :")) {
-			output = in1.readLine();
-			System.out.println(output);
-		}
-		Scanner clavier = new Scanner(System.in);
-		String numService = "";
-		try {
-			// ex : classes.ServiceInversion
-			numService = clavier.next();
-			//charger la classe et la déclarer au ServiceRegistry
-			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
-			out.println(numService);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		System.out.println(in1.readLine());
-		out.println(clavier.next());
-		System.out.println(in1.readLine());
-
 
 	}
+
+
 
 	private static void addService(PrintWriter out, BufferedReader in1, String pseudo) throws IOException {
 		System.out.println("Renseigner le chemin vers la classe de service");
-		Scanner clavier = new Scanner(System.in);
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		out.println(pseudo);
 		try {
 			// ex : classes.ServiceInversion
-			String classeName = clavier.next();
+			String classeName = input.readLine();
 			//charger la classe et la déclarer au ServiceRegistry
 			//ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
 			out.println(classeName);
 		}
 		catch (ClassCastException e) {
-			System.out.println("la classe doit implémenter service.bri.Service");
+			System.out.println("la classe doit implémenter service.Service");
 		}
 
 		System.out.println(in1.readLine());
